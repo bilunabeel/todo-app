@@ -18,7 +18,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        poppins_extralight:['Poppins Extralight'],
+        poppins_extralight:['Poppins Extralight','sans-serif'],
         poppins_regular:['Poppins Regular', 'sans-serif'],
         poppins_semibold:['Poppins Semibold','sans-serif' ],
         poppins_medium:['Poppins Medium', 'sans-serif']
@@ -33,10 +33,6 @@ export default {
       boxShadow: {
         '3xl': '0 10px 40px rgba(0, 0, 0, 0.1)'
       },
-      // backgroundImage: {
-      //   'hero': "url('assets/images/collection-background.svg')",
-      //   'card': "url('assets/images/thumbnail-background.svg')",
-      // },
       screens: {
         'xs': '475px',
         'sm': '640px',
