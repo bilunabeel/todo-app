@@ -2,8 +2,6 @@ import {useState} from 'react';
 import Header from './section/Header';
 import Hero from './section/Hero';
 import {BrowserRouter as Router, Route,Routes, Link} from 'react-router-dom';
-import SignUp from './section/SignUp';
-import SignIn from './section/SignIn';
 
 function App () {
   const [todo, setTodo] = useState ('');
@@ -23,10 +21,10 @@ function App () {
 
 
 
-        <Routes>
+        {/* <Routes>
           <Route path="/signin" element={<SignIn/>} />
           <Route path="/signup" element={<SignUp/>} />
-        </Routes>
+        </Routes> */}
       </div>
     </Router>
   );
