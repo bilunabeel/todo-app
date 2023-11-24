@@ -18,10 +18,11 @@ export default {
     },
     extend: {
       fontFamily: {
-        poppins_extralight:['Poppins Extralight','sans-serif'],
-        poppins_regular:['Poppins Regular', 'sans-serif'],
-        poppins_semibold:['Poppins Semibold','sans-serif' ],
-        poppins_medium:['Poppins Medium', 'sans-serif']
+        poppins:['Poppins','sans-serif']
+        // poppins_extralight:['Poppins Extralight','sans-serif'],
+        // poppins_regular:['Poppins Regular', 'sans-serif'],
+        // poppins_semibold:['Poppins Semibold','sans-serif' ],
+        // poppins_medium:['Poppins Medium', 'sans-serif']
       },
       colors: {
         'primary': "#ECEEFF",

@@ -1,8 +1,8 @@
 import {useState} from 'react';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {createUserWithEmailAndPassword, signOut} from 'firebase/auth';
 import auth from '../firebase/firebase';
 
-const SignUp = ({setShowSignUp, showSignUp}) => {
+const SignUp = ({setUser,setShowSignUp, showSignUp}) => {
   const [email, setEmail] = useState ('');
   const [password, setPassword] = useState ('');
   const [error, setError] = useState (null);
@@ -11,14 +11,15 @@ const SignUp = ({setShowSignUp, showSignUp}) => {
     e.preventDefault ();
     try {
 
-          await createUserWithEmailAndPassword (auth, email, password);
+          const userCredentials = await createUserWithEmailAndPassword (auth, email, password);
+          console.log(userCredentials.user);
+          setUser (userCredentials.user)
           setError (null);
           console.log ();
       
     } catch (error) {
       setError (mapFirebaseErrorMessage(error.code));
-      console.log(error.code);
-      console.log(error.message);
+      console.log('Error signing up', error);
     }
   };
 
@@ -29,6 +30,8 @@ const SignUp = ({setShowSignUp, showSignUp}) => {
     }
     return errorMessage[errorCode] || 'There is a problem!'
   }
+
+
 
   return (
     <div className="w-80% bg-light-yellow rounded-full px-5">

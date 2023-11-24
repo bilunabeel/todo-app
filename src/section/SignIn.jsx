@@ -3,7 +3,7 @@ import {signInWithEmailAndPassword} from 'firebase/auth';
 import auth from '../firebase/firebase';
 import {Link} from 'react-router-dom';
 
-const SignIn = ({setShowSignUp, showSignUp}) => {
+const SignIn = ({setUser,setShowSignUp, showSignUp}) => {
   const [email, setEmail] = useState ('');
   const [password, setPassword] = useState ('');
   const [error,setError]=useState(null)
@@ -12,7 +12,8 @@ const SignIn = ({setShowSignUp, showSignUp}) => {
   const handleSignIn = async e => {
     e.preventDefault ();
     try {
-        await signInWithEmailAndPassword (auth, email, password);
+        const userCredentials = await signInWithEmailAndPassword (auth, email, password);
+        setUser(userCredentials.user)
         console.log ('Successfully Signed In');
       setError(null)
     } catch (error) {
