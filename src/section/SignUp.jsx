@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {createUserWithEmailAndPassword, signOut} from 'firebase/auth';
 import auth from '../firebase/firebase';
 
-const SignUp = ({setUser,setShowSignUp, showSignUp}) => {
+const SignUp = ({setUser,setShowSignUp, showSignUp,setSignedIn}) => {
   const [email, setEmail] = useState ('');
   const [password, setPassword] = useState ('');
   const [error, setError] = useState (null);
@@ -14,6 +14,7 @@ const SignUp = ({setUser,setShowSignUp, showSignUp}) => {
           const userCredentials = await createUserWithEmailAndPassword (auth, email, password);
           console.log(userCredentials.user);
           setUser (userCredentials.user)
+          setSignedIn(true)
           setError (null);
           console.log ();
       
@@ -34,12 +35,13 @@ const SignUp = ({setUser,setShowSignUp, showSignUp}) => {
 
 
   return (
-    <div className="w-80% bg-light-yellow rounded-full px-5">
-      <form name="signup" onSubmit={handleSignUp}>
+    <div>
+      <form name="signup" className='flex flex-col gap-4' onSubmit={handleSignUp}>
         <input
           type="email"
           value={email}
           placeholder="Email"
+          className="bg-light-yellow placeholder:text-yellow-900 px-5 text-sm rounded-full shadow-md h-10  max-sm:w-[100%]"
           onChange={e => {
             setEmail (e.target.value);
           
@@ -49,17 +51,20 @@ const SignUp = ({setUser,setShowSignUp, showSignUp}) => {
           type="password"
           value={password}
           placeholder="Password"
+          className="bg-light-yellow placeholder:text-yellow-900 px-5 text-sm rounded-full shadow-md h-10  max-sm:w-[100%]"
           onChange={e => {
             setPassword (e.target.value);
           }}
           />
+<div className='flex gap-5 items-center'>
 
-        <button type="submit">Sign Up</button>
+        <button type="submit"  className="bg-white font-semibold text-sm w-[50%]  h-10  rounded-full shadow-md">Sign Up</button>
           {error && <p>{error}</p>}
-      </form>
-      <p className="cursor-pointer" onClick={() => setShowSignUp (!showSignUp)}>
+      <p className="cursor-pointer text-white max-sm:text-sm" onClick={() => setShowSignUp (!showSignUp)}>
         Already have an account?
       </p>
+</div>
+      </form>
     </div>
   );
 };

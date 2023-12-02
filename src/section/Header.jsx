@@ -1,14 +1,14 @@
-import {useState,useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
-import { onAuthStateChanged,signOut } from 'firebase/auth';
+import {onAuthStateChanged, signOut} from 'firebase/auth';
 import auth from '../firebase/firebase';
 
 const Header = ({todo, setTodo, todos, setTodos}) => {
   //state for user registration components
   const [signedIn, setSignedIn] = useState (false);
-  const [showSignUp,setShowSignUp]=useState(false)
-  const [user,setUser]=useState(null)
+  const [showSignUp, setShowSignUp] = useState (false);
+  const [user, setUser] = useState (null);
 
   const handleSubmit = e => {
     e.preventDefault ();
@@ -19,32 +19,31 @@ const Header = ({todo, setTodo, todos, setTodos}) => {
     }
   };
 
-  useEffect(() => {
-    
-    const unsubscribe = onAuthStateChanged(auth,(authUser)=>{
-      if(authUser){
-        setUser(authUser)
-      }else{
-        setUser(null)
+  useEffect (() => {
+    const unsubscribe = onAuthStateChanged (auth, authUser => {
+      if (authUser) {
+        setUser (authUser);
+        user ? setSignedIn(true):setSignedIn(false)
+        console.log('header'+signedIn);
+        console.log(user);
+      } else {
+        setUser (null);
       }
-    })
-  
+    });
+
     return () => {
-      unsubscribe()
-    }
-  }, [])
-  
+      unsubscribe ();
+    };
+  }, []);
 
-  const handleSignOut = async()=>{
-    
+  const handleSignOut = async () => {
     try {
-      await signOut(auth)
-      console.log('signed out');
+      await signOut (auth);
+      console.log ('signed out');
     } catch (error) {
-      console.log('error signing out', error);
+      console.log ('error signing out', error);
     }
-
-  }
+  };
 
   return (
     <header
@@ -67,16 +66,36 @@ const Header = ({todo, setTodo, todos, setTodos}) => {
                 placeholder="Eg: Read Books"
                 className="bg-light-yellow placeholder:text-yellow-900 px-5 text-sm rounded-full shadow-md h-10 w-[80%] max-sm:w-[100%]"
               />
+
               <button
                 type="submit"
                 className="bg-white font-semibold text-sm w-28 max-sm:w-full h-10  rounded-full shadow-md"
               >
                 Add Task
               </button>
+              
             </form>
-          :  showSignUp? <SignUp setUser={setUser} setShowSignUp={setShowSignUp} showSignUp={showSignUp} />: <SignIn setUser={setUser} setShowSignUp={setShowSignUp} showSignUp={showSignUp} />}
-      {!user && <button onClick={handleSignOut} className="bg-white font-semibold text-sm w-28 max-sm:w-full h-10  rounded-full shadow-md">Sign Out</button>
-      } 
+          : showSignUp
+              ? <SignUp
+                  setUser={setUser}
+                  setShowSignUp={setShowSignUp}
+                  showSignUp={showSignUp}
+                  setSignedIn={setSignedIn}
+                />
+              : <SignIn
+                  setUser={setUser}
+                  setShowSignUp={setShowSignUp}
+                  showSignUp={showSignUp}
+                  setSignedIn={setSignedIn}
+                  signedIn={signedIn}
+                />}
+        {user &&  
+          <button
+            onClick={handleSignOut}
+            className="bg-white font-semibold text-sm w-28 max-sm:w-full h-10  rounded-full shadow-md"
+          >
+            Sign Out
+          </button>}
       </div>
     </header>
   );

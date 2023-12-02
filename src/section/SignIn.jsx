@@ -3,7 +3,7 @@ import {signInWithEmailAndPassword} from 'firebase/auth';
 import auth from '../firebase/firebase';
 import {Link} from 'react-router-dom';
 
-const SignIn = ({setUser,setShowSignUp, showSignUp}) => {
+const SignIn = ({setUser,setShowSignUp, showSignUp,setSignedIn,signedIn}) => {
   const [email, setEmail] = useState ('');
   const [password, setPassword] = useState ('');
   const [error,setError]=useState(null)
@@ -14,6 +14,8 @@ const SignIn = ({setUser,setShowSignUp, showSignUp}) => {
     try {
         const userCredentials = await signInWithEmailAndPassword (auth, email, password);
         setUser(userCredentials.user)
+        setSignedIn(true)
+        console.log('sign in'+signedIn);
         console.log ('Successfully Signed In');
       setError(null)
     } catch (error) {
@@ -34,11 +36,12 @@ const SignIn = ({setUser,setShowSignUp, showSignUp}) => {
 
 
   return (
-    <div className="w-80% bg-light-yellow rounded-full px-5">
-      <form name="signin" onSubmit={handleSignIn}>
+    <div >
+      <form name="signin" className='flex flex-col gap-4' onSubmit={handleSignIn}>
         <input
           type="email"
           placeholder="Email"
+          className="bg-light-yellow placeholder:text-yellow-900 px-5 text-sm rounded-full shadow-md h-10  max-sm:w-[100%]"
           value={email}
           onChange={e => {
             setEmail (e.target.value);
@@ -47,17 +50,21 @@ const SignIn = ({setUser,setShowSignUp, showSignUp}) => {
         <input
           type="password"
           placeholder="Password"
+          className="bg-light-yellow placeholder:text-yellow-900 px-5 text-sm rounded-full shadow-md h-10  max-sm:w-[100%]"
           value={password}
           onChange={e => {
             setPassword (e.target.value);
         }}
         />
-        <button type="submit">Sign In</button>
-      </form>
+        <div className='flex gap-5 items-center'>
+
+        <button type="submit"  className="bg-white font-semibold text-sm w-[50%] h-10  rounded-full shadow-md">Sign In</button>
       {error && <p>{error}</p>}
-      <p className="cursor-pointer" onClick={() => setShowSignUp (!showSignUp)}>
+      <p className="cursor-pointer text-white max-sm:text-sm" onClick={() => setShowSignUp (!showSignUp)}>
         Don't have an account?
       </p>
+        </div>
+      </form>
     </div>
   );
 };
