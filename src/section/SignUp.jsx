@@ -28,6 +28,7 @@ const SignUp = ({setUser,setShowSignUp, showSignUp,setSignedIn}) => {
     const errorMessage = {
         'auth/invalid-email': "Enter a Valid Email!",
         'auth/weak-password': 'Password should be atleast 6 characters!',
+        'auth/email-already-in-use': 'Email Already in use!'
     }
     return errorMessage[errorCode] || 'There is a problem!'
   }
@@ -56,13 +57,13 @@ const SignUp = ({setUser,setShowSignUp, showSignUp,setSignedIn}) => {
             setPassword (e.target.value);
           }}
           />
-<div className='flex gap-5 items-center'>
-
-        <button type="submit"  className="bg-white font-semibold text-sm w-[50%]  h-10  rounded-full shadow-md">Sign Up</button>
-          {error && <p>{error}</p>}
-      <p className="cursor-pointer text-white max-sm:text-sm" onClick={() => setShowSignUp (!showSignUp)}>
+{/* <p className='text-center text-light-yellow'>There is an error!</p> */}
+          {error && <p className='text-center text-light-yellow' >{error}</p>}
+<div className='flex justify-between max-sm:flex-col-reverse gap-5 items-center'>
+      <p className="cursor-pointer text-white text-sm" onClick={() => setShowSignUp (!showSignUp)}>
         Already have an account?
       </p>
+        <button type="submit"  className="bg-white font-semibold text-sm w-[50%] max-sm:w-full h-10  rounded-full shadow-md">Sign Up</button>
 </div>
       </form>
     </div>

@@ -2,6 +2,7 @@ import {useState} from 'react';
 import Header from './section/Header';
 import Hero from './section/Hero';
 import {BrowserRouter as Router, Route,Routes, Link} from 'react-router-dom';
+import Footer from './section/Footer';
 
 function App () {
   const [todo, setTodo] = useState ('');
@@ -18,7 +19,7 @@ function App () {
           setTodos={setTodos}
         />
         <Hero todos={todos} setTodos={setTodos} />
-
+<Footer/>
 
 
         {/* <Routes>

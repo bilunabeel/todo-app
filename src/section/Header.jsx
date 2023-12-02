@@ -3,6 +3,7 @@ import SignIn from './SignIn';
 import SignUp from './SignUp';
 import {onAuthStateChanged, signOut} from 'firebase/auth';
 import auth from '../firebase/firebase';
+import { AiOutlineLogout } from "react-icons/ai";
 
 const Header = ({todo, setTodo, todos, setTodos}) => {
   //state for user registration components
@@ -23,13 +24,22 @@ const Header = ({todo, setTodo, todos, setTodos}) => {
     const unsubscribe = onAuthStateChanged (auth, authUser => {
       if (authUser) {
         setUser (authUser);
-        user ? setSignedIn(true):setSignedIn(false)
+        setSignedIn(true)
+        localStorage.setItem('user',JSON.stringify(authUser))
         console.log('header'+signedIn);
         console.log(user);
       } else {
         setUser (null);
+        setSignedIn(false)
+        localStorage.removeItem('user')
       }
     });
+
+    const storedUser = localStorage.getItem('user')
+    if(storedUser){
+      setUser(JSON.parse(storedUser))
+      setSignedIn(true)
+    }
 
     return () => {
       unsubscribe ();
@@ -55,7 +65,10 @@ const Header = ({todo, setTodo, todos, setTodos}) => {
           Todo<span className="font-extralight">App</span>
         </h1>
         {signedIn
-          ? <form
+          ? 
+          <div>
+
+          <form
               onSubmit={handleSubmit}
               className="flex gap-4 max-sm:flex-col"
             >
@@ -75,6 +88,8 @@ const Header = ({todo, setTodo, todos, setTodos}) => {
               </button>
               
             </form>
+         
+            </div>
           : showSignUp
               ? <SignUp
                   setUser={setUser}
@@ -90,12 +105,19 @@ const Header = ({todo, setTodo, todos, setTodos}) => {
                   signedIn={signedIn}
                 />}
         {user &&  
-          <button
-            onClick={handleSignOut}
-            className="bg-white font-semibold text-sm w-28 max-sm:w-full h-10  rounded-full shadow-md"
+          <div onClick={handleSignOut}>
+            <button
+            
+            className="absolute top-5 right-5 bg-yellow-green font-semibold text-sm w-28 max-sm:w-full h-10 max-sm:hidden rounded-full shadow-md"
           >
             Sign Out
-          </button>}
+          </button>
+          <div className='absolute top-5 right-5 sm:hidden bg-yellow-green rounded-full h-10 w-10 flex justify-center items-center'>
+
+          <AiOutlineLogout className='' />
+          </div>
+          </div>
+          }
       </div>
     </header>
   );
