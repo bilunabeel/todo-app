@@ -52,7 +52,7 @@ const Hero = ({todos, setTodos}) => {
     },
   ];
   return (
-    <section className="font-poppins max-container max-sm:padding-x flex flex-col gap-5 items-center mt-[40px]">
+    <section className="font-poppins max-container max-sm:padding-x flex flex-col gap-5 min-h-screen items-center mt-[40px]">
 
       {/* Counts tags for remaining, completed and total */}
 
