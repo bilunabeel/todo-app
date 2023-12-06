@@ -51,10 +51,11 @@ const Hero = ({todos, setTodos}) => {
       count: todos.length,
     },
   ];
+
   return (
     <section className="font-poppins max-container max-sm:padding-x flex flex-col gap-5 min-h-screen items-center mt-[40px]">
 
-      {/* Counts tags for remaining, completed and total */}
+      {/* Count tags for remaining, completed and total */}
 
       <div className="flex justify-evenly max-sm:w-full max-sm:text-[10px] text-xs w-[450px]">
         {counts.map (count => (
