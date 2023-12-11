@@ -3,39 +3,85 @@ import {faCircle, faCircleXmark} from '@fortawesome/free-regular-svg-icons';
 import {faCircleCheck} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {useEffect, useState} from 'react';
+import {collection, doc, getDocs, updateDoc,deleteDoc} from 'firebase/firestore';
+import {db} from '../firebase/firebase';
 
 const Hero = ({todos, setTodos}) => {
   const [did, setDid] = useState ([]);
-  const [remaining,setRemaining]=useState([])
+  const [remaining, setRemaining] = useState ([]);
 
-  const checkToggle = (index, value) => {
-    const todosArray = [...todos];
-    todosArray[index].checked = value;
-    setTodos (todosArray);
+  //checking todo after done
+  const checkToggle = async (index, value) => {
+    try {
+      const todosArray = [...todos];
+      todosArray[index].checked = value;
+      setTodos (todosArray);
+
+      const updated = doc (db, 'todos', todosArray[index].id);
+       await updateDoc (updated, {checked: value});
+    } catch (error) {
+      console.error ('Error checking Todo!',error);
+    }
   };
 
-  const editTodo = (index, newText) => {
-    const updated = [...todos];
-    console.log (updated[index]);
-    updated[index].text = newText;
-    setTodos (updated);
+  //editing todo
+  const editTodo = async(index, newText) => {
+    try {
+      const todoArray = [...todos]
+      todoArray[index].text = newText
+      setTodos(todoArray)
+
+      const updated = doc(db,'todos',todoArray[index].id)
+      await updateDoc(updated,{text:newText})
+    } catch (error) {
+      console.error('Error in editing Todo!',error)
+    }
   };
 
-  const removeTodo = indexToRemove => {
-    const updated = todos.filter ((todo, index) => index !== indexToRemove);
-    setTodos (updated);
+  //removing todo
+  const removeTodo = async(indexToRemove) => {
+    try {
+      const todoArray = [...todos]
+      const filtered =todoArray.filter((todo,index)=>index !== indexToRemove)
+      setTodos(filtered)
+
+      const removeRef = doc(db,'todos',todoArray[indexToRemove].id)
+      await deleteDoc(removeRef)
+
+    } catch (error) {
+      console.error("Error in removing Todo!",error);
+    }
+    
   };
 
-  useEffect(()=>{
+  //fetching todos from firestore collection
+  useEffect (
+    () => {
+      const getTodosFromStore = async () => {
+        try {
+          const querySnapshot = await getDocs (collection (db, 'todos'));
+          const fetchedTodos = [];
+          querySnapshot.forEach (doc => {
+            const todoData = doc.data ();
+            todoData.id = doc.id;
+            fetchedTodos.push (todoData);
+          });
+          // console.log (fetchedTodos.map((e)=>(e.checked)));
+          setTodos (fetchedTodos);
+        } catch (error) {
+          console.error ('Error getting Todos!', error);
+        }
+      };
+      getTodosFromStore ();
 
-  const checkedTodos = todos.filter((todo)=>todo.checked)
-  setDid(checkedTodos)
+      const checkedTodos = todos.filter (todo => todo.checked);
+      setDid (checkedTodos);
 
-  const remainingTodos = todos.filter((todo)=>!todo.checked)
-  setRemaining(remainingTodos)
-
-},[todos])
-
+      const remainingTodos = todos.filter (todo => !todo.checked);
+      setRemaining (remainingTodos);
+    },
+    [todos]
+  );
 
   const counts = [
     {
@@ -57,7 +103,7 @@ const Hero = ({todos, setTodos}) => {
 
       {/* Count tags for remaining, completed and total */}
 
-      <div className="flex justify-evenly max-sm:w-full max-sm:text-[10px] text-xs w-[450px]">
+      <div className="flex justify-between max-sm:w-full max-sm:text-[10px] text-xs w-[450px]">
         {counts.map (count => (
           <div key={count.title}>
             <div className=" text-white font-semibold rounded-l-full flex items-center">
@@ -79,7 +125,11 @@ const Hero = ({todos, setTodos}) => {
           key={index}
           className={`${td.checked ? 'bg-yellow-green' : 'bg-light-yellow'} h-10 flex justify-between px-5 items-center w-[450px] max-sm:w-full shadow-sm rounded-full`}
         >
-          <div className='cursor-pointer' onClick={() => checkToggle (index, !td.checked)}>
+
+          <div
+            className="cursor-pointer"
+            onClick={() => checkToggle (index, !td.checked)}
+          >
             {td.checked
               ? <FontAwesomeIcon icon={faCircleCheck} />
               : <FontAwesomeIcon icon={faCircle} />}
@@ -91,12 +141,13 @@ const Hero = ({todos, setTodos}) => {
             className="bg-transparent w-[80%] h-7 outline-none"
           />
           <FontAwesomeIcon
-          className='cursor-pointer'
+            className="cursor-pointer"
             onClick={() => removeTodo (index)}
             icon={faCircleXmark}
           />
         </div>
       ))}
+
     </section>
   );
 };

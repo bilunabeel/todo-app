@@ -14,6 +14,7 @@ const Header = ({todo, setTodo, todos, setTodos}) => {
   const [showSignUp, setShowSignUp] = useState (false);
   const [user, setUser] = useState (null);
 
+  //by submitting todos will be added to firestore
   const handleSubmit = async (e) => {
     
     e.preventDefault ();
@@ -47,8 +48,7 @@ const Header = ({todo, setTodo, todos, setTodos}) => {
         setUser (authUser);
         setSignedIn (true);
         localStorage.setItem ('user', JSON.stringify (authUser));
-        console.log ('header' + signedIn);
-        console.log (user);
+        
       } else {
         setUser (null);
         setSignedIn (false);
@@ -60,6 +60,9 @@ const Header = ({todo, setTodo, todos, setTodos}) => {
     if (storedUser) {
       setUser (JSON.parse (storedUser));
       setSignedIn (true);
+
+      
+
     }
 
     return () => {
