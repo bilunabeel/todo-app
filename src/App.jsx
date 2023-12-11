@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import Header from './section/Header';
 import Hero from './section/Hero';
-import {BrowserRouter as Router, Route,Routes, Link} from 'react-router-dom';
+import {BrowserRouter as Router} from 'react-router-dom';
 import Footer from './section/Footer';
 
 function App () {
@@ -22,10 +22,6 @@ function App () {
 <Footer/>
 
 
-        {/* <Routes>
-          <Route path="/signin" element={<SignIn/>} />
-          <Route path="/signup" element={<SignUp/>} />
-        </Routes> */}
       </div>
     </Router>
   );
